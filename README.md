@@ -1,2 +1,111 @@
-# escape-from-automanual-testing
-A three-hour tutorial on property-based testing with https://hypothesis.works
+# Escape from automanual testing with Hypothesis!
+
+A three-hour workshop on property-based testing with [Hypothesis](https://hypothesis.works),
+first delivered at [PyCon 2019](https://us.pycon.org/2019/schedule/presentation/91/).
+
+It is designed for intermediate Python users, with extension activities up to expert level.
+Some minimal experience of unit testing and `pytest` are assumed - if you have ever used
+`@pytest.mark.parametrize`, you are overqualified; but if you have never written and run
+unit tests you may have trouble.
+
+
+## How this workshop works
+
+It's a crash-course in the important concepts, alternating between short talks and
+hands-on excercises.  You'll get to know the architecture of the library, but not
+every detail of the API - you can look up that documentation at any time.
+
+
+#### Setting up
+
+Clone this repository, and `pip install pytest hypothesis`.  That's it!
+
+*Any recent version of `pytest`, and any `hypothesis>=4.0`.
+Use whatever package manager and environment you prefer - Hypothesis is very
+widely compatible.  If in doubt, just `pip install` as above.*
+
+
+#### Property-based testing 101
+
+Each block starts with a short talk (slides separated by a blank black slide),
+followed by a hands-on excercise where you can apply what you've just learned.
+In this first block we'll see
+[a taxonomy of testing techniques](https://www.hillelwayne.com/post/a-bunch-of-tests/),
+[define property-based testing](https://hypothesis.works/articles/what-is-property-based-testing/),
+ and get an initial overview of Hypothesis.
+
+After the talk:
+
+1. Follow the "Setting up" instructions above
+2. Run `pytest pbt-101.py`.  You should see several passing tests.
+3. Open the file in your preferred editor and read the detailed instructions within!
+   (in short: fix the test, check the test fails, fix the test, check that it passes)
+
+
+#### Hypothesis `strategies` and property-based "tactics"
+
+This block aims to get you comfortable and productive with Hypothesis, which means
+covering two things: how to generate all kinds of data, and how to use it in your tests.
+
+`strategies` are objects which tell `@given` what to pass to your test function.
+Hypothesis ships with dozens for standard library types and optional dependencies
+such as pytz, Django, Numpy, and Pandas - to say nothing of
+[third-party extensions](https://hypothesis.readthedocs.io/en/latest/strategies.html)!
+We'll see what's available to explicitly describe your data or infer it from a schema
+(e.g. strings from a regular expression), and how you can combine, compose and adjust
+strategies to produce something quite different.
+
+"Tactics" are design patterns for property based tests.  They range from
+[common properties to test](https://fsharpforfunandprofit.com/posts/property-based-testing-2/),
+through to [embedding assertions in your code](https://blog.regehr.org/archives/1091)
+(not just tests) for [free integration tests](https://www.hillelwayne.com/post/pbt-contracts/),
+and more.
+
+After the talk, `pytest strategies-and-tactics.py`, and continue as above.
+
+
+#### Testing the Untestable
+
+Nothing is ever really untestable - but sometimes you need better tools to make
+testing worth the trouble.  We'll explore two approaches:
+
+- *stateful testing*, where you define a finite automaton and Hypothesis uses it
+  to generate whole test programs (by choosing actions as well as values)
+- *metamorphic testing*, where you don't know what the code *should* do - but do
+  know something about how changes in the input relate to changes in the output
+
+The
+
+
+#### The bigger picture
+
+We'll discuss Hypothesis' performance characteristics and configuration options,
+get a sense of the community around it and the project roadmap, and look at how
+Hypothesis fits into the wider testing and correctness landscape in Python.
+
+For this final block, you have a few options:
+
+- Continue working on any unfinished excercises from previous blocks
+- Start testing your own code with Hypothesis
+- Join a group discussion - what to you plan to test?  What 'killer feature'
+  is missing?
+- Learn about the scary CS and implementation details that power Hypothesis
+  (*not* needed for users, or even contributors - for interest only)
+
+
+## Useful links
+
+As well as the links above, you may be interested in:
+
+Official Hypothesis links
+
+- [Hypothesis' official documentation](https://hypothesis.readthedocs.io/)
+- [Hypothesis' technical blog](https://hypothesis.works/articles/technical/)
+- [More practice excercises](https://github.com/DRmacIver/hypothesis-training) -
+  if you finish early, these are a good challenge.
+
+Testing tactics
+
+- [Choosing properties for property-based testing](https://fsharpforfunandprofit.com/posts/property-based-testing-2/)
+  is written for F#, but the ideas are useful in any language.
+- [PBT with oracle functions](https://www.hillelwayne.com/post/hypothesis-oracles/)
