@@ -69,12 +69,16 @@ After the talk, `pytest strategies-and-tactics.py`, and continue as above.
 Nothing is ever really untestable - but sometimes you need better tools to make
 testing worth the trouble.  We'll explore two approaches:
 
-- *stateful testing*, where you define a finite automaton and Hypothesis uses it
-  to generate whole test programs (by choosing actions as well as values)
-- *metamorphic testing*, where you don't know what the code *should* do - but do
-  know something about how changes in the input relate to changes in the output
+- [Stateful testing](https://hypothesis.works/articles/rule-based-stateful-testing/),
+  where you define a finite automaton and Hypothesis uses it to generate whole test
+  programs (by choosing actions as well as values).
+- [Metamorphic testing](https://www.hillelwayne.com/post/metamorphic-testing/),
+  where you don't know exactly what the code *should* do - but do know something
+  about how changes in the input relate to changes in the output.
 
-The
+The excercises in `test-the-untestable.py` are deliberately challenging.  Choose
+whichever one is the most interesting to you, and don't worry if it takes you the
+whole block in class - you can always come back to the others later.
 
 
 #### The bigger picture
@@ -97,15 +101,16 @@ For this final block, you have a few options:
 
 As well as the links above, you may be interested in:
 
-Official Hypothesis links
-
 - [Hypothesis' official documentation](https://hypothesis.readthedocs.io/)
 - [Hypothesis' technical blog](https://hypothesis.works/articles/technical/)
 - [More practice excercises](https://github.com/DRmacIver/hypothesis-training) -
   if you finish early, these are a good challenge.
-
-Testing tactics
-
 - [Choosing properties for property-based testing](https://fsharpforfunandprofit.com/posts/property-based-testing-2/)
   is written for F#, but the ideas are useful in any language.
 - [PBT with oracle functions](https://www.hillelwayne.com/post/hypothesis-oracles/)
+  and [Finding property tests](https://www.hillelwayne.com/post/contract-examples/).
+  Hillel Wayne has written several other posts on testing with Hypothesis.
+- [*AFL + QuickCheck = ?*](https://danluu.com/testing/) - a hardware engineer's
+  perspective on software testing.  (Hypothesis did use coverage information for
+  a while, but took it out as the overhead made it net-negative test power)
+- [How SQLite is Tested](https://www.sqlite.org/testing.html)
