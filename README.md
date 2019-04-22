@@ -21,8 +21,10 @@ every detail of the API - you can look up that documentation at any time.
 Clone this repository, and `pip install pytest hypothesis`.  That's it!
 
 *Any recent version of `pytest`, and any `hypothesis>=4.0`.
-Use whatever package manager and environment you prefer - Hypothesis is very
-widely compatible.  If in doubt, just `pip install` as above.*
+Use whatever package manager and environment you prefer - if in doubt,
+just `pip install` as above.  Hypothesis is compatible with every currently
+supported version of Python, i.e. 2.7, 3.5, 3.6, and 3.7 - and a similarly
+wide range of versions for it's optional dependencies.*
 
 
 #### Property-based testing 101
@@ -48,8 +50,8 @@ This block aims to get you comfortable and productive with Hypothesis, which mea
 covering two things: how to generate all kinds of data, and how to use it in your tests.
 
 `strategies` are objects which tell `@given` what to pass to your test function.
-Hypothesis ships with dozens for standard library types and optional dependencies
-such as pytz, Django, Numpy, and Pandas - to say nothing of
+Hypothesis [ships with dozens for standard library types](https://hypothesis.readthedocs.io/en/latest/data.html)
+and optional dependencies such as pytz, Django, Numpy, and Pandas - to say nothing of
 [third-party extensions](https://hypothesis.readthedocs.io/en/latest/strategies.html)!
 We'll see what's available to explicitly describe your data or infer it from a schema
 (e.g. strings from a regular expression), and how you can combine, compose and adjust
