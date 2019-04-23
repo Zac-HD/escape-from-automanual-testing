@@ -10,41 +10,125 @@ Key link:  https://hypothesis.readthedocs.io/en/latest/data.html
 
 """
 
+import json
+
+import pytest
+
+import hypothesis
 from hypothesis import given, settings, strategies as st
 
 
 ##############################################################################
-#
+# Practicing with the `.map(...)` method
 
-# NOTE: filter
-
-
-##############################################################################
-#
-
-# NOTE: map
+# Remove the mark.xfail decorator,
+# then add a .map(...) to the strategy that makes the test pass.
+# You'll need to change the value, then the type.
 
 
-##############################################################################
-#
+@pytest.mark.xfail
+@given(st.integers())
+def test_map_even_numbers(x):
+    assert x[-1] in "02468"
 
-# NOTE: flatmap
 
-
-##############################################################################
-#
-
-# NOTE: something about different ways to define recursive data?
+@pytest.mark.xfail
+@given(st.integers())
+def test_map_odd_numbers(x):
+    assert x[-1] in "13579"
 
 
 ##############################################################################
-#
+# Practicing with the `.filter(...)` method
+# Same tasks as above, without using map or transforming the value!
 
-# NOTE: composite starting with return constant; force use of verbose mode to check filled out version
+
+@pytest.mark.xfail
+@given(st.integers())
+def test_map_even_numbers(x):
+    assert str(x)[-1] in "02468"
+
+
+@pytest.mark.xfail
+@given(st.integers())
+def test_map_odd_numbers(x):
+    assert str(x)[-1] in "13579"
+
+
+##############################################################################
+# Defining recursive data.
+
+# There are a couple of ways to define recursive data with Hypothesis,
+# leaning on the fact that strategies are lazily instantiated.
+# In the last block of excercises, you saw the `st.recursive` function...
+# if not, go finish that and then come back!
+#
+# `st.recursive` takes a base strategy, and a function that takes a strategy
+# and returns an extended strategy.  All good if we want that structure!
+# If you want mutual recursion though, or have a complicated kind of data
+# (or just limited time in a tutorial), `st.deferred` is the way to go.
+
+json_strat = st.deferred(
+    lambda: st.one_of(
+        # JSON values are defined as one of null, false, true, a number,
+        # a string, an array of json values, or a dict of string to json values.
+        # TODO: Write out this definition in Hypothesis strategies!
+        st.none(),
+        st.just(False),
+    )
+)
+
+
+# You can use `@settings(verbosity=hypothesis.Verbosity.verbose)` (or `debug`)
+# to see what's going on, or get a summary with the `hypothesis.event(message)`
+# function and `pytest --hypothesis-show-statistics ...`
+@given(json_strat)
+def test_json_dumps(value):
+    """Checks that value is serialisable as JSON."""
+    hypothesis.note("value={}".format(value))
+    hypothesis.event("type: {}".format(type(value)))
+    # TODO (extension): test round-trip serialisation *including* NaN.  How?
+    json.dumps(value)
+
+
+##############################################################################
+# `@st.composite` excercise
+
+# This goal of this excercise is to play with a contrived data dependency,
+# using a composite strategy to generate inputs.  You can use the same tricks
+# as above to check what's being generated, so try to keep the test passing!
+
+
+@st.composite
+def a_composite_strategy(draw):
+    """Generates a (List[int], index) pair.  The index points to a random positive
+    element (>= 1); if there are no positive elements index is None.
+    """
+    # TODO: draw a list, determine the allowed indices, and choose one to return
+    lst = []  # TODO: draw a list of integers here
+    index = None
+    # TODO: determine the list of allowed indices, and choose one if non-empty
+    return (lst, index)
+
+
+@given(a_composite_strategy())
+def test_a_composite_strategy(value):
+    # Why generate a tuple with a `@composite` strategy instead of using two
+    # separate strategies?  This way we can ensure certain relationships between
+    # the `lst` and `index` values!  (You can get a similar effect with st.data(),
+    # but the reporting and reproducibility isn't as nice.)
+    lst, index = value
+    assert all(isinstance(n, int) for n in lst)
+    if value is None:
+        assert all(n < 1 for n in lst)
+    else:
+        assert lst[index] >= 1
 
 
 ##############################################################################
 # Simplified json-schema inference
+
+# Note: you are not expected to finish this optional extension!
 
 # One really useful pattern for complex data is to infer a strategy from an
 # existing schema of some kind.  For example, Hypothesis ships with functions
