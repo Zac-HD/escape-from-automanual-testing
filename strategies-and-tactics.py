@@ -119,7 +119,7 @@ def test_a_composite_strategy(value):
     # but the reporting and reproducibility isn't as nice.)
     lst, index = value
     assert all(isinstance(n, int) for n in lst)
-    if value is None:
+    if index is None:
         assert all(n < 1 for n in lst)
     else:
         assert lst[index] >= 1
