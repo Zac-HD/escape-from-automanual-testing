@@ -91,8 +91,8 @@ class HanoiPuzzle(object):
 
     def __init__(self, num_rings=3):
         assert 1 <= num_rings <= 10
-        self.num_rings = num_rings
-        self.A = list(reversed(range(0, num_rings)))
+        self.rings = tuple(reversed(range(num_rings)))
+        self.A = list(self.rings)
         self.B = []
         self.C = []
 
@@ -100,13 +100,13 @@ class HanoiPuzzle(object):
         return "<HanoiPuzzle with A={self.A}, B={self.B}, C={self.C}>".format(self=self)
 
     def check_valid(self):
-        assert set(self.A + self.B + self.C) == set(range(self.num_rings))
+        assert set(self.A + self.B + self.C) == set(self.rings)
         for peg in (self.A, self.B, self.C):
             assert peg == sorted(peg, reverse=True)
 
     @property
     def is_solved(self):
-        return self.A == [] and self.B == [] and self.C == list(range(self.num_rings))
+        return self.A == [] and self.B == [] and self.C == list(self.rings)
 
     def move(self, source, dest):
         note("Moving disk from {} to {}".format(source, dest))
