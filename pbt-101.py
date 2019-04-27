@@ -30,7 +30,7 @@ from hypothesis import given, strategies as st
 """
 Testing a List-Sorting Function
 -------------------------------
-In this problem, we have a bad sorting functions and several tests that fail to 
+In this problem, we have a bad sorting functions and several tests that fail to
 catch the bug in the function.
 
 Improve the tests so that they catch the bug in the sorting function.
@@ -62,11 +62,10 @@ def test_sort_a_list_parametrize(lst):
     """This is a parameterized test that leverages the built-in `sorted`
     function as an 'oracle' that we can compare against.
 
-    It asserts  that a general property holds for many inputs (we'll
-    discuss this specific pattern more later).
+    It asserts  that a general property holds for many inputs - in fact,
+    all the same inputs that we tested in the version above.
 
-    Add an example to the list of parameters that catches the bug in
-    `sort_a_list`"""
+    Add the same input as above to see that it catches the same problem"""
     assert sorted(lst) == sort_a_list(lst)
 
 
@@ -87,13 +86,13 @@ def test_sort_a_list(lst):
 Takeaway
 --------
 This demonstrates varying degrees of manual, auto-manual, and automated testing.
-Even though we were able to devise hand-crafted examples that caught the bug in 
-our sorting function, we would have to add many more examples by hand before we 
+Even though we were able to devise hand-crafted examples that caught the bug in
+our sorting function, we would have to add many more examples by hand before we
 can have any sort of real confidence that our manual tests are robust.
 
 On the other hand, our hypothesis-driven test is generating hundreds of incisive
-examples for us. This test gives us much stronger assurances about the correctness 
-of our sorting function. 
+examples for us. This test gives us much stronger assurances about the correctness
+of our sorting function.
 """
 
 ##############################################################################
@@ -101,12 +100,12 @@ of our sorting function.
 """
 Testing Summation Properties
 ----------------------------
-In this problem we want to devise the most general hypothesis search strategy that 
+In this problem we want to devise the most general hypothesis search strategy that
 generates lists-of-integers that satisfy the property:
 
     max(lst) < sum(lst)
 
-The search strategies `st.lists()` and `st.integers()` both take arguments that will 
+The search strategies `st.lists()` and `st.integers()` both take arguments that will
 help us restrict the values produced by our search strategy so that this property is
 satisfied.
 
@@ -126,8 +125,8 @@ def test_sum_of_list_greater_than_max(lst):
 """
 Takeaway
 --------
-Hypothesis' search strategies are designed to provide users with fine control 
-over the values that are being generated. Ultimately, we can custom-tailor 
+Hypothesis' search strategies are designed to provide users with fine control
+over the values that are being generated. Ultimately, we can custom-tailor
 search strategies obey rich properties in order to serve our tests.
 """
 
@@ -136,16 +135,16 @@ search strategies obey rich properties in order to serve our tests.
 """
 Testing a Padding Function
 --------------------------
-Write a test that finds the bugs in the function `leftpad`, and then fix 
+Write a test that finds the bugs in the function `leftpad`, and then fix
 the bugs.
 
-1) Improve the hypothesis search strategy for `test_leftpad` so that 
-   widths other than zero are tested (up to e.g. 1000 - capped for 
+1) Improve the hypothesis search strategy for `test_leftpad` so that
+   widths other than zero are tested (up to e.g. 1000 - capped for
    performance).
 
-2) Improve `test_leftpad`. Add assertions that certain properties are 
+2) Improve `test_leftpad`. Add assertions that certain properties are
    satisfied by the output of `leftpad`. I.e.:
-   - The padded result has the correct a length: 
+   - The padded result has the correct a length:
      either `width` or `len(string)`, whichever is larger.
    - The padded result ends with the input string.
    - The padded result begins with the correct padding characters.
@@ -165,14 +164,10 @@ def leftpad(string, width, fillchar):
 
     width : int
         A non-negative integer specifying the minimum guaranteed
-        width of the left-padded string.
+        width of the left-padded output string.
 
     fillchar : str
         The character (length-1 string) used to pad the string.
-
-    Returns
-    -------
-    str
 
     Examples
     --------
@@ -181,12 +176,12 @@ def leftpad(string, width, fillchar):
     >>> leftpad('cat', width=5, fillchar="Z")
     'ZZcat'
 
-    >>> leftpad('Dog Cow', width=2, fillchar="Z")
-    'Dog Cow'
+    >>> leftpad('Dog', width=2, fillchar="Z")
+    'Dog'
     """
     assert isinstance(width, int) and width >= 0, width
     assert isinstance(fillchar, str) and len(fillchar) == 1, fillchar
-    return string
+    return string  # Uh oh, we haven't padded this at all!
 
 
 @given(string=st.text(), width=st.just(0), fillchar=st.characters())
@@ -203,15 +198,15 @@ def test_leftpad(string, width, fillchar):
 """
 Takeaway
 --------
-This exercise gives us a sense for how well-written, property-based tests 
+This exercise gives us a sense for how well-written, property-based tests
 can gracefully drive the process for writing code.
 
 The combination of:
- - Using expressive hypothesis search strategies to generate 
+ - Using expressive hypothesis search strategies to generate
    inputs to your function.
- - Identifying and testing properties of your function that are 
+ - Identifying and testing properties of your function that are
    incisive and discriminating.
-   
+
 makes for a great road-map for writing your function!
 """
 
@@ -220,46 +215,43 @@ makes for a great road-map for writing your function!
 """
 Testing a Roundtrip Relationship
 --------------------------------
-In this problem we want to ensure that an instance of our custom 
-`Record` class can be encoded as JSON-string, and then later be 
+In this problem we want to ensure that an instance of our custom
+`Record` class can be encoded as JSON-string, and then later be
 decoded without having its value changed.
 
-Here, we behold the power of Hypothesis' recursive strategies, which 
-will permit us to generate examples of such records, including the 
+Here, we behold the power of Hypothesis' recursive strategies, which
+will permit us to generate examples of such records, including the
 lists-of-lists-of-items, dicts-of-lists-of items, etc.
 
 
-Our record can store the following values:
+Our record can store the following values, just like JSON:
   - `None`
   - booleans
-  - floats
+  - finite numbers (i.e. all integers and most floats)
   - strings
   - lists of any of the aforementioned items
     - this includes, recursively, lists and dictionaries of these items
-  - dictionaries that map string -> any of the aformentioned items 
+  - dictionaries that map string -> any of the aformentioned items
     - this includes, recursively, lists and dictionaries of these items
 
 Follow these steps:
-1) Add an assertion to `test_record_json_roundtrip` that checks 
-   if `to_json` -> `from_json` 'round-trips' properly. 
-   Note that this should fail because `from_json` is bad. 
+1) Add an assertion to `test_record_json_roundtrip` that checks
+   if `to_json` -> `from_json` 'round-trips' properly.
+   Note that this should fail because `from_json` is bad.
 
 2) Fix the implementation of `Record.from_json`.
 
-3) You will find that `Record(nan)` fails to roundtrip successfully.
-   This is because `nan != nan` by definition. 
-   
-   Unfortunately, we can't merely write a conditional statement in our test to 
-   accommodate this one case, for we will then encounter cases like 
-   `Record([[nan]])` and `Record({'a': {'a': nan}})`, and so on. Yay for recursion.
-   
-   We can restrict the `st.floats()` strategy so that it will not introduce 
-   nans into  our JSON objects. Lookup the `st.floats()` documentation towards 
-   this end, and update the implementation of `json_strat` to exclude nans.
+3) You will find that not all records are equal to themselves, because our
+   input strategy allows some things that it should ban.  Skipping the test
+   for non-self-equal records using `hypothesis.assume(record == record)`
+   will reveal an interesting fact about list equalities!  To fix this,
+   you'll therefore need to restrict the recursive strategy a little.
 """
 
 
 class Record(object):
+    # If you don't like writing out the special __methods__, this class
+    # would be a great fit for the `attrs` package or `dataclasses`!
 
     def __init__(self, value):
         self.value = value
@@ -272,7 +264,7 @@ class Record(object):
 
     def to_json(self):
         """Encodes `self.value` as a JSON-string"""
-        return json.dumps(self.value, indent=4, sort_keys=True)
+        return json.dumps(self.value, indent=4)
 
     @classmethod
     def from_json(cls, string):
@@ -286,7 +278,7 @@ class Record(object):
 
 # We can define recursive strategies like so:
 json_strat = st.recursive(
-    st.none() | st.booleans() | st.floats() | st.text(),
+    st.none() | st.booleans() | st.integers() | st.floats() | st.text(),
     lambda substrat: st.lists(substrat) | st.dictionaries(st.text(), substrat),
 )
 
@@ -300,6 +292,16 @@ def test_record_json_roundtrip(record):
     # TODO: assert that the new and old records match
 
 
+# Extension option: imagine that we are sending serialised records to an
+# expensive network service, and would like to cache the results for records
+# that we've seen before.
+#    1. Write a test that for any record, calling .to_json() twice gives
+#       you the same string each time.
+#    2. Write a test that takes a record, converts it to json (string #1),
+#       back to a new record, and finally to json again.  Are these strings
+#       equal?  Would this have the same problem as test_record_json_roundtrip?
+
+
 """
 Takeaway
 --------
@@ -307,14 +309,14 @@ There are a few things to note here. First, a roundtrip-relationship
 is a simple but powerful property to test. That being said, such a test
 is useful only if it tests a sufficiently-broad and diverse set of inputs.
 
-Constructing such inputs by-hand in this scenario would be 
+Constructing such inputs by-hand in this scenario would be
 impermissibly-grueling and would inevitably make for a narrow test.
 
-Leveraging Hypothesis' recursive strategy in conjunction with a single 
+Leveraging Hypothesis' recursive strategy in conjunction with a single
 assertion about the roundtrip relationship makes for a very powerful test
-indeed. However, this is contingent on our ability to compose search strategies 
-to generate values that suit our needs. It pays off to develop experience towards
-this end.     
+indeed. However, this is contingent on our ability to compose strategies
+to generate values that suit our needs. It pays off to develop experience
+towards this end.
 """
 ##############################################################################
 # Done early?  Check out the run-length encoding excercise at
