@@ -217,9 +217,49 @@ makes for a great road-map for writing your function!
 
 ##############################################################################
 
+"""
+Testing a Roundtrip Relationship
+--------------------------------
+In this problem we want to ensure that an instance of our custom 
+`Record` class can be encoded as JSON-string, and then later be 
+decoded without having its value changed.
+
+Here, we behold the power of Hypothesis' recursive strategies, which 
+will permit us to generate examples of such records, including the 
+lists-of-lists-of-items, dicts-of-lists-of items, etc.
+
+
+Our record can store the following values:
+  - `None`
+  - booleans
+  - floats
+  - strings
+  - lists of any of the aforementioned items
+    - this includes, recursively, lists and dictionaries of these items
+  - dictionaries that map string -> any of the aformentioned items 
+    - this includes, recursively, lists and dictionaries of these items
+
+Follow these steps:
+1) Add an assertion to `test_record_json_roundtrip` that checks 
+   if `to_json` -> `from_json` 'round-trips' properly. 
+   Note that this should fail because `from_json` is bad. 
+
+2) Fix the implementation of `Record.from_json`.
+
+3) You will find that `Record(nan)` fails to roundtrip successfully.
+   This is because `nan != nan` by definition. 
+   
+   Unfortunately, we can't merely write a conditional statement in our test to 
+   accommodate this one case, for we will then encounter cases like 
+   `Record([[nan]])` and `Record({'a': {'a': nan}})`, and so on. Yay for recursion.
+   
+   We can restrict the `st.floats()` strategy so that it will not introduce 
+   nans into  our JSON objects. Lookup the `st.floats()` documentation towards 
+   this end, and update the implementation of `json_strat` to exclude nans.
+"""
+
 
 class Record(object):
-    # Consider using the `attrs` package (attrs.org) or dataclasses instead.
 
     def __init__(self, value):
         self.value = value
@@ -231,19 +271,22 @@ class Record(object):
         return type(self) == type(other) and self.value == other.value
 
     def to_json(self):
+        """Encodes `self.value` as a JSON-string"""
         return json.dumps(self.value, indent=4, sort_keys=True)
 
     @classmethod
     def from_json(cls, string):
+        """Decodes a JSON-string back into a `Record` instance
+
+        This is a *bad* method. This needs to be fixed
+        """
         value = string
         return cls(value)
 
 
 # We can define recursive strategies like so:
 json_strat = st.recursive(
-    # JSON values are defined as nil, false, true, number, string, ...
     st.none() | st.booleans() | st.floats() | st.text(),
-    # or arrays of json, or "objects" ie string: json dictionaries.
     lambda substrat: st.lists(substrat) | st.dictionaries(st.text(), substrat),
 )
 
@@ -254,12 +297,25 @@ json_strat = st.recursive(
 def test_record_json_roundtrip(record):
     string = record.to_json()
     new = Record.from_json(string)
-    # assert record == new
-    # TODO: fix the first problem in the code being tested
-    # TODO: fix the second problem by using hypothesis.assume in the test,
-    #       or an argument to one of the strategies defining json
+    # TODO: assert that the new and old records match
 
 
+"""
+Takeaway
+--------
+There are a few things to note here. First, a roundtrip-relationship
+is a simple but powerful property to test. That being said, such a test
+is useful only if it tests a sufficiently-broad and diverse set of inputs.
+
+Constructing such inputs by-hand in this scenario would be 
+impermissibly-grueling and would inevitably make for a narrow test.
+
+Leveraging Hypothesis' recursive strategy in conjunction with a single 
+assertion about the roundtrip relationship makes for a very powerful test
+indeed. However, this is contingent on our ability to compose search strategies 
+to generate values that suit our needs. It pays off to develop experience towards
+this end.     
+"""
 ##############################################################################
 # Done early?  Check out the run-length encoding excercise at
 # https://github.com/DRMacIver/hypothesis-training as a bonus!
