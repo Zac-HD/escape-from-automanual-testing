@@ -27,37 +27,74 @@ from hypothesis import given, strategies as st
 
 
 ##############################################################################
+"""
+Testing a List-Sorting Function
+-------------------------------
+In this problem, we have a bad sorting functions and several tests that fail to 
+catch the bug in the function.
+
+Improve the tests so that they catch the bug in the sorting function.
+"""
 
 
 def sort_a_list(lst):
-    # TODO: sort the list however you wish (use a builtin OR write a sort func)
-    # Consider writing the test first so you see it fail!
+    """This is a *bad* sorting function. It is meant to take a list of
+    integers and return a sorted list in ascending order.
+    """
+    # TODO: After fixing the tests, fix this function.
+    #       You may use a builtin function  OR write
+    #       a sort function yourself.
     return lst[::-1]
 
 
 def test_sort_a_list_basic():
-    # Assertions with hand-picked examples.
+    """This is a manual test. Add an assertion by-hand that catches the
+    bug in the sorting function"""
     assert sort_a_list([]) == []
     assert sort_a_list([1]) == [1]
     assert sort_a_list([1, 1]) == [1, 1]
     assert sort_a_list([3, 2, 1]) == [1, 2, 3]
+    # add an assertion here
 
 
-@pytest.mark.parametrize("lst", ([], [1], [1, 1], [3, 2, 1]))
+@pytest.mark.parametrize("lst", ([], [1], [1, 1], [3, 2, 1]))  # add an example case here
 def test_sort_a_list_parametrize(lst):
-    # Assert a general property on many inputs.
-    # (we'll discuss this specific pattern more later)
+    """This is a parameterized test that leverages the built-in `sorted`
+    function as an 'oracle' that we can compare against.
+
+    It asserts  that a general property holds for many inputs (we'll
+    discuss this specific pattern more later).
+
+    Add an example to the list of parameters that catches the bug in
+    `sort_a_list`"""
     assert sorted(lst) == sort_a_list(lst)
 
 
 @given(lst=st.lists(st.integers()))
 def test_sort_a_list(lst):
-    # Note: even before the assertion, we're checking that sort_a_list
-    #  doesn't raise an exception for any list of integers!
+    """This test leverages hypothesis to generate lists of integers for us.
+
+    Add an assertion that the sorted list is indeed in the correct order."""
+    # Note: Even before the assertion, we're checking that `sort_a_list`
+    #       doesn't raise an exception for any list of integers! This is
+    #       a form of testing in its own right!
     new = sort_a_list(lst.copy())
     assert Counter(lst) == Counter(new)  # sorted list must have same elements
     # TODO: assert that the list is in correct order
 
+
+"""
+Takeaway
+--------
+This demonstrates varying degrees of manual, auto-manual, and automated testing.
+Even though we were able to devise hand-crafted examples that caught the bug in 
+our sorting function, we would have to add many more examples by hand before we 
+can have any sort of real confidence that our manual tests are robust.
+
+On the other hand, our hypothesis-driven test is generating hundreds of incisive
+examples for us. This test gives us much stronger assurances about the correctness 
+of our sorting function. 
+"""
 
 ##############################################################################
 
