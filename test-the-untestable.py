@@ -6,7 +6,7 @@ This file contains most of the code for four problems:
 - Solving the "water jug problem" from *Die Harder* with stateful testing
 - Solving the "Towers of Hanoi" puzzle with stateful testing
 - Validating summary statistics for numeric types with metamorphic testing
-- Checking graph search algorigthms with metamorphic testing
+- Checking graph search algorithms with metamorphic testing
 
 If you're more interested in metamorphic testing, I'd skip down to the statistics
 problem and then come back to the water jug problem if you finish early.
@@ -203,7 +203,7 @@ from collections import deque
 from string import ascii_uppercase
 
 """How to demonstrate metamorphic testing, without any dependencies?
-The technique really shines for larger and more complext systems -
+The technique really shines for larger and more complex systems -
 my current favorite example is general tests for RESTful APIs
 (http://www.lsi.us.es/~segura/files/papers/segura17-tse.pdf).
 

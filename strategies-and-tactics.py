@@ -134,7 +134,7 @@ def test_a_composite_strategy(value):
 # existing schema of some kind.  For example, Hypothesis ships with functions
 # for inference from types, regular expressions, Numpy dtypes, etc.
 #
-# This excercise is to write a function that, given a simple "json-schema",
+# This exercise is to write a function that, given a simple "json-schema",
 # returns a strategy for objects that will match that schema (details below).
 #
 # We'll use a simplified subset of the specification today, but there is a

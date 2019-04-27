@@ -91,7 +91,7 @@ Hypothesis fits into the wider testing and correctness landscape in Python.
 
 For this final block, you have a few options:
 
-- Continue working on any unfinished excercises from previous blocks
+- Continue working on any unfinished exercises from previous blocks
 - Start testing your own code with Hypothesis
 - Join a group discussion - what to you plan to test?  What 'killer feature'
   is missing?
