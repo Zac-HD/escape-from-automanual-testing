@@ -98,13 +98,28 @@ of our sorting function.
 
 ##############################################################################
 
+"""
+Testing Summation Properties
+----------------------------
+In this problem we want to devise the most general hypothesis search strategy that 
+generates lists-of-integers that satisfy the property:
 
-@given(st.just([1, 2, 3]))  # lists of integers with the following constraint:
+    max(lst) < sum(lst)
+
+The search strategies `st.lists()` and `st.integers()` both take arguments that will 
+help us restrict the values produced by our search strategy so that this property is
+satisfied.
+
+Links to relevant docs:
+https://hypothesis.readthedocs.io/en/latest/data.html#hypothesis.strategies.integers
+https://hypothesis.readthedocs.io/en/latest/data.html#hypothesis.strategies.lists
+"""
+
+
+@given(st.just([1, 2, 3]))  # update this search strategy to be more-general
 def test_sum_of_list_greater_than_max(lst):
     # TODO: *without* changing the test body, write the most general
     #       argument to @given that will pass for lists of integers.
-    # hint: both lists() and integers() take arguments that will help.
-    #       See https://hypothesis.readthedocs.io/en/latest/data.html
     assert max(lst) < sum(lst)
 
 
