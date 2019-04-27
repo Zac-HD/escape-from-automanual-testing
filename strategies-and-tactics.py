@@ -67,16 +67,24 @@ def test_map_odd_numbers(x):
 # and returns an extended strategy.  All good if we want that structure!
 # If you want mutual recursion though, or have a complicated kind of data
 # (or just limited time in a tutorial), `st.deferred` is the way to go.
+#
+# The `Record` excercise in pbt-101.py defined JSON using `st.recursive`,
+# if you want to compare them, and has some extension problems that you
+# could write as tests here instead.
 
 json_strat = st.deferred(
     lambda: st.one_of(
-        # JSON values are defined as one of null, false, true, a number,
+        # JSON values are defined as one of null, false, true, a finite number,
         # a string, an array of json values, or a dict of string to json values.
-        # TODO: Write out this definition in Hypothesis strategies!
         st.none(),
-        st.just(False),
+        st.booleans(),
+        # TODO: Write out the rest of this definition in Hypothesis strategies!
     )
 )
+# If in doubt, you can copy-paste the definition of json_strat to an interactive
+# prompt, and use the `.example()` method of the strategy to see what kind of
+# data it generates.  Be warned though!  The distribution of `.example()`s is
+# skewed towards simple options, and it should only ever be used interactively.
 
 
 # You can use `@settings(verbosity=hypothesis.Verbosity.verbose)` (or `debug`)
@@ -85,9 +93,11 @@ json_strat = st.deferred(
 @given(json_strat)
 def test_json_dumps(value):
     """Checks that value is serialisable as JSON."""
+    # We expect this test to always pass - the point of this excercise is
+    # to define a recursive strategy, and then investigate the values it
+    # generates for a *passing* test.
     hypothesis.note("value={}".format(value))
     hypothesis.event("type: {}".format(type(value)))
-    # TODO (extension): test round-trip serialisation *including* NaN.  How?
     json.dumps(value)
 
 
@@ -158,7 +168,10 @@ def check_schema(schema):
     if type_ in ("null", "bool"):
         assert len(schema) == 1  # No other keys allowed
     # TODO: number: check maximum and minimum, no other keys
-    # TODO: string: check maxLength and minLength, no other keys
+    elif type_ == "string":
+        assert set(schema).issubset("type minLength maxLength".split())
+        # TODO: check the values of maxLength and minLength are positive
+        # and correctly ordered - *if* the keys are present at all!
     # TODO: array: check maxLength and minLength, items schema, no other keys
     #       (bonus round: support uniqueItems for arrays with JSON round-trip)
 
@@ -174,7 +187,7 @@ def validate(schema, instance):
         return isinstance(instance, float) and schema.get(
             "minimum", float("-inf")
         ) <= instance <= schema.get("maximum", float("inf"))
-    # TODO: complete validation checks for string and array
+    # TODO: complete length validation checks for string and array
     if schema.get("type") == "string":
         return isinstance(instance, type(u""))
     return isinstance(instance, list)
