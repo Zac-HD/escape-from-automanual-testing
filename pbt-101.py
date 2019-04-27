@@ -9,7 +9,7 @@ Then run `pytest pbt-101.py`.  You should see nine passing tests.
 (see README.md for more details on installation)
 
 
-There are four excercises in this file.  For each (and I suggest in order):
+There are four exercises in this file.  For each (and I suggest in order):
 
 1. Fix the test, so that it detects the "bug".
 2. Run the tests with `pytest pbt-101.py` - if they don't fail, go to step 1.
