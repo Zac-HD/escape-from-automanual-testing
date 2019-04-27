@@ -123,6 +123,14 @@ def test_sum_of_list_greater_than_max(lst):
     assert max(lst) < sum(lst)
 
 
+"""
+Takeaway
+--------
+Hypothesis' search strategies are designed to provide users with fine control 
+over the values that are being generated. Ultimately, we can custom-tailor 
+search strategies obey rich properties in order to serve our tests.
+"""
+
 ##############################################################################
 
 """
