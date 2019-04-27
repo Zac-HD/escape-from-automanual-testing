@@ -125,22 +125,87 @@ def test_sum_of_list_greater_than_max(lst):
 
 ##############################################################################
 
+"""
+Testing a Padding Function
+--------------------------
+Write a test that finds the bugs in the function `leftpad`, and then fix 
+the bugs.
+
+1) Improve the hypothesis search strategy for `test_leftpad` so that 
+   widths other than zero are tested (up to e.g. 1000 - capped for 
+   performance).
+
+2) Improve `test_leftpad`. Add assertions that certain properties are 
+   satisfied by the output of `leftpad`. I.e.:
+   - The padded result has the correct a length: 
+     either `width` or `len(string)`, whichever is larger.
+   - The padded result ends with the input string.
+   - The padded result begins with the correct padding characters.
+
+3) Fix the `leftpad` function, using your test to guide your implementation.
+"""
+
 
 def leftpad(string, width, fillchar):
-    # TODO: if len(string) < width, add fillchar to the left until it isn't.
-    # Bonus points for finding a trivial or pythonic solution.
+    """This is a *bad* function. Update the test to catch the bugs,
+    and then come back to fix this.
+
+    Parameters
+    ----------
+    string : str
+        The input string
+
+    width : int
+        A non-negative integer specifying the minimum guaranteed
+        width of the left-padded string.
+
+    fillchar : str
+        The character (length-1 string) used to pad the string.
+
+    Returns
+    -------
+    str
+
+    Examples
+    --------
+    The following it the *intended* behavior of this function:
+
+    >>> leftpad('cat', width=5, fillchar="Z")
+    'ZZcat'
+
+    >>> leftpad('Dog Cow', width=2, fillchar="Z")
+    'Dog Cow'
+    """
+    assert isinstance(width, int) and width >= 0, width
+    assert isinstance(fillchar, str) and len(fillchar) == 1, fillchar
     return string
 
 
-@given(st.text(), st.just(0), st.characters())
+@given(string=st.text(), width=st.just(0), fillchar=st.characters())
 def test_leftpad(string, width, fillchar):
     # TODO: allow any length from zero up to e.g. 1000 (capped for performance)
     padded = leftpad(string, width, fillchar)
-    assert len(padded) == max(width, len(string))
-    assert padded.endswith(string)
-    # TODO: assert that correct padding has been added
-    # (the trick is to write code and tests which will have different bugs)
+    assert isinstance(padded, str), padded
+    # TODO: Add assertions about the properties described above.
+    #       Avoid using redundant code/logic between your test
+    #       and the function that you are writing - they may have
+    #       the same bugs!
 
+
+"""
+Takeaway
+--------
+This exercise gives us a sense for how well-written, property-based tests 
+can gracefully drive the process for writing code.
+
+The combination of:
+ - Using expressive hypothesis search strategies to generate 
+   inputs to your function.
+ - Identifying and testing properties of your function that are 
+   incisive and discriminating.
+   
+makes for a great road-map for writing your function!
+"""
 
 ##############################################################################
 
