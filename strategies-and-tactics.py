@@ -19,16 +19,34 @@ from hypothesis import given, settings, strategies as st
 
 
 ##############################################################################
-# Practicing with the `.map(...)` method
+# Practicing with the `.filter(...)` method
 
 # Remove the mark.xfail decorator,
-# then add a .map(...) to the strategy that makes the test pass.
-# You'll need to change the value, then the type.
+# then improve the filter function to make the test pass.
+@pytest.mark.xfail
+@given(st.integers().filter(lambda x: True))
+def test_filter_even_numbers(x):
+    # If we convert any even integer to a string, the last digit will be even.
+    assert str(x)[-1] in "02468"
+
+
+@pytest.mark.xfail
+@given(st.integers())
+def test_filter_odd_numbers(x):
+    # If we convert any odd integer to a string, the last digit will be odd.
+    assert str(x)[-1] in "13579"
+
+
+##############################################################################
+# Practicing with the `.map(...)` method
+# Same tasks as above, without using .filter(...).
+# You'll need to change the value of the integer, then convert it to a string.
 
 
 @pytest.mark.xfail
 @given(st.integers())
 def test_map_even_numbers(x):
+    # Check that last character of string x is a substring of "02468"
     assert x[-1] in "02468"
 
 
@@ -39,29 +57,10 @@ def test_map_odd_numbers(x):
 
 
 ##############################################################################
-# Practicing with the `.filter(...)` method
-# Same tasks as above, without using map or transforming the value!
-
-
-@pytest.mark.xfail
-@given(st.integers())
-def test_map_even_numbers(x):
-    assert str(x)[-1] in "02468"
-
-
-@pytest.mark.xfail
-@given(st.integers())
-def test_map_odd_numbers(x):
-    assert str(x)[-1] in "13579"
-
-
-##############################################################################
 # Defining recursive data.
 
 # There are a couple of ways to define recursive data with Hypothesis,
 # leaning on the fact that strategies are lazily instantiated.
-# In the last block of excercises, you saw the `st.recursive` function...
-# if not, go finish that and then come back!
 #
 # `st.recursive` takes a base strategy, and a function that takes a strategy
 # and returns an extended strategy.  All good if we want that structure!
@@ -87,16 +86,17 @@ json_strat = st.deferred(
 # skewed towards simple options, and it should only ever be used interactively.
 
 
-# You can use `@settings(verbosity=hypothesis.Verbosity.verbose)` (or `debug`)
-# to see what's going on, or get a summary with the `hypothesis.event(message)`
-# function and `pytest --hypothesis-show-statistics ...`
+# You can use `@settings(verbosity=hypothesis.Verbosity.verbose)` (or `debug`,
+# or `pytest -s --hypothesis-verbosity=verbose`) to see what's going on,
+# or get a summary with the `hypothesis.event(message)` function and
+# `pytest --hypothesis-show-statistics ...`
 @given(json_strat)
 def test_json_dumps(value):
     """Checks that value is serialisable as JSON."""
     # We expect this test to always pass - the point of this excercise is
     # to define a recursive strategy, and then investigate the values it
     # generates for a *passing* test.
-    hypothesis.note("value={}".format(value))
+    hypothesis.note("value={!r}".format(value))
     hypothesis.event("type: {}".format(type(value)))
     json.dumps(value)
 
@@ -227,4 +227,3 @@ def test_schema_inference(data, schema):
 
 
 # TODO: write a test that shows validate may return False (maybe a unit test!)
-

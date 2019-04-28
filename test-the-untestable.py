@@ -142,7 +142,7 @@ class HanoiPuzzle(object):
 
 class HanoiSolver(RuleBasedStateMachine):
     def __init__(self):
-        super().__init__()
+        RuleBasedStateMachine.__init__(self)
         self.hanoi = HanoiPuzzle(3)
 
     @invariant()
@@ -157,7 +157,7 @@ class HanoiSolver(RuleBasedStateMachine):
     # to avoid making any invalid moves.  You may want to define a helper
     # function to make this less verbose!
 
-    @precondition(lambda self: ...)
+    @precondition(lambda self: True)  # TODO: tighten the precondition
     @rule()
     def move_A_to_B(self):
         # TODO: Move A to B, not this no-op.

@@ -57,7 +57,16 @@ def test_sort_a_list_basic():
     # add an assertion here
 
 
-@pytest.mark.parametrize("lst", ([], [1], [1, 1], [3, 2, 1]))  # add an example case here
+@pytest.mark.parametrize(
+    "lst",
+    (
+        [],
+        [1],
+        [1, 1],
+        [3, 2, 1]
+        # add an example case here
+    ),
+)
 def test_sort_a_list_parametrize(lst):
     """This is a parameterized test that leverages the built-in `sorted`
     function as an 'oracle' that we can compare against.
@@ -70,14 +79,14 @@ def test_sort_a_list_parametrize(lst):
 
 
 @given(lst=st.lists(st.integers()))
-def test_sort_a_list(lst):
+def test_sort_a_list_hypothesis(lst):
     """This test leverages hypothesis to generate lists of integers for us.
 
     Add an assertion that the sorted list is indeed in the correct order."""
     # Note: Even before the assertion, we're checking that `sort_a_list`
     #       doesn't raise an exception for any list of integers! This is
     #       a form of testing in its own right!
-    new = sort_a_list(lst.copy())
+    new = sort_a_list(list(lst))
     assert Counter(lst) == Counter(new)  # sorted list must have same elements
     # TODO: assert that the list is in correct order
 
@@ -180,7 +189,7 @@ def leftpad(string, width, fillchar):
     'Dog'
     """
     assert isinstance(width, int) and width >= 0, width
-    assert isinstance(fillchar, str) and len(fillchar) == 1, fillchar
+    assert isinstance(fillchar, type(u"")) and len(fillchar) == 1, fillchar
     return string  # Uh oh, we haven't padded this at all!
 
 
@@ -188,7 +197,7 @@ def leftpad(string, width, fillchar):
 def test_leftpad(string, width, fillchar):
     # TODO: allow any length from zero up to e.g. 1000 (capped for performance)
     padded = leftpad(string, width, fillchar)
-    assert isinstance(padded, str), padded
+    assert isinstance(padded, type(u"")), padded
     # TODO: Add assertions about the properties described above.
     #       Avoid using redundant code/logic between your test
     #       and the function that you are writing - they may have
