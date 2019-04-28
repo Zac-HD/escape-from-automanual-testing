@@ -60,7 +60,7 @@ def test_map_odd_numbers(x):
 
 # There are a couple of ways to define recursive data with Hypothesis,
 # leaning on the fact that strategies are lazily instantiated.
-# In the last block of excercises, you saw the `st.recursive` function...
+# In the last block of exercises, you saw the `st.recursive` function...
 # if not, go finish that and then come back!
 #
 # `st.recursive` takes a base strategy, and a function that takes a strategy
@@ -209,7 +209,7 @@ def from_schema(schema):
 # `@st.composite` is one way to write this - another would be to define a
 # bare function, and `return st.one_of(st.none(), st.booleans(), ...)` so
 # each strategy can be defined individually.  Use whichever seems more
-# natural to you - the important thing in tests is usally readability!
+# natural to you - the important thing in tests is usually readability!
 @st.composite
 def schema_strategy(draw):
     schema = {"type": draw(st.sampled_from(SCHEMA_TYPES))}
