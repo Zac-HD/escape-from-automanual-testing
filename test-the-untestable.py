@@ -19,6 +19,21 @@ from hypothesis.stateful import RuleBasedStateMachine, invariant, precondition, 
 # The Water Jug problem.  Thanks to Nicholas Chammas for the idea and demo!
 # Spoilers at http://nchammas.com/writing/how-not-to-die-hard-with-hypothesis
 
+# In the movie Die Hard with a Vengeance (aka Die Hard 3), there is a famous
+# scene where John McClane (Bruce Willis) and Zeus Carver (Samuel L. Jackson)
+# have to solve a problem or be blown up: Given a 3 gallon jug and a 5 gallon jug,
+# how do you measure out exactly 4 gallons of water?
+# https://www.youtube.com/watch?v=6cAbgAaEOVE
+
+# We don't have a bomb handy, but we *can* make Hypothesis solve this for us!
+# We just need to set up the state and possible actions... then we can claim
+# that making random moves never leads to the "solved" state, and let
+# Hypothesis find a counter-example.  Fortunately, Hypothesis will also
+# shrink what it finds to a minimal sequence of actions!
+
+# This pattern, where all the state lives on the RuleBasedStateMachine,
+# is the easiest way to get started with stateful testing.
+
 
 # Volumes provided as constants so you can experiment with other sizes.
 TARGET_VOLUME = 4
@@ -81,12 +96,22 @@ DieHardTest = DieHardProblem.TestCase
 # Towers of Hanoi.  Thanks to Harry Stern for the idea and demo!
 # Spoilers: https://github.com/HypothesisWorks/hypothesis/issues/1857
 
+# As a kid, I remember playing with this puzzle and thinking that it was
+# impossible.  Let's try to validate my frustration by testing that with
+# Hypothesis!
+
+# Note that for this example, we have two changes compared to the last:
+# 1. The state is not managed by the RuleBasedStateMachine, but by a
+#    "system under test" (HanoiPuzzle), and
+# 2. You will need to decide what actions possible, and use preconditions
+#    to tell Hypothesis which are *valid* from the current state.
+
 
 class HanoiPuzzle(object):
     """A model for https://en.wikipedia.org/wiki/Tower_of_Hanoi
 
-    You can make a move by calling `self.a2b()`, `self.b2c()`,
-    and so on - but better check that it's a valid move first!
+    Make a move by calling `self.move("A", "B")`, `self.move("B", "C")`,
+    and so on - but you'd better check that it's a valid move first!
     """
 
     def __init__(self, num_rings=3):
@@ -110,6 +135,7 @@ class HanoiPuzzle(object):
 
     def move(self, source, dest):
         note("Moving disk from {} to {}".format(source, dest))
+        assert source in set("ABC") and dest in set("ABC")
         source, dest = getattr(self, source), getattr(self, dest)
         dest.append(source.pop())
 
