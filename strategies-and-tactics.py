@@ -38,6 +38,22 @@ def test_map_odd_numbers(x):
     assert x[-1] in "13579"
 
 
+# Takeaway
+# --------
+# `.map` permits us to extend Hypothesis' core strategies in powerful
+# ways. See that it can be used to affect the individual values being
+# produced by a strategy (e.g. mapping integers to even-valued
+# integers), as well as to cast the values to a different type (e.g.
+# mapping an integer to a string.
+#
+# If it seems like a data-type is missing from Hypothesis'
+# strategies, then it is likely that a simple application of `.map`
+# will suffice. E.g. suppose you want a strategy that generate deques,
+# then
+#     `deque_strat = st.lists(...).map(lambda x: deque(x))`
+# will serve nicely.
+
+
 ##############################################################################
 # Practicing with the `.filter(...)` method
 # Same tasks as above, without using map or transforming the value!
@@ -55,12 +71,24 @@ def test_map_odd_numbers(x):
     assert str(x)[-1] in "13579"
 
 
+# Takeaway
+# --------
+# While `.filter` was used here to the same effect as `.map` above,
+# it should be noted that filtering should not be relied on to reject
+# large populations of generated values. Hypothesis will raise if
+# a strategy ends up filtering too many values in attempt to generate
+# permissible ones.
+#
+# Suppose you want to generate all integers except 0, this is a perfect
+# application of `.filter`:
+#    `st.integers().filter(x)  # bool(x) evaluates to False iff x==0`
+
 ##############################################################################
 # Defining recursive data.
 
 # There are a couple of ways to define recursive data with Hypothesis,
 # leaning on the fact that strategies are lazily instantiated.
-# In the last block of excercises, you saw the `st.recursive` function...
+# In the last block of exercises, you saw the `st.recursive` function...
 # if not, go finish that and then come back!
 #
 # `st.recursive` takes a base strategy, and a function that takes a strategy
@@ -68,14 +96,15 @@ def test_map_odd_numbers(x):
 # If you want mutual recursion though, or have a complicated kind of data
 # (or just limited time in a tutorial), `st.deferred` is the way to go.
 #
-# The `Record` excercise in pbt-101.py defined JSON using `st.recursive`,
+# The `Record` exercise in pbt-101.py defined JSON using `st.recursive`,
 # if you want to compare them, and has some extension problems that you
 # could write as tests here instead.
 
+
+# JSON values are defined as one of null, false, true, a finite number,
+# a string, an array of json values, or a dict of string to json values.
 json_strat = st.deferred(
     lambda: st.one_of(
-        # JSON values are defined as one of null, false, true, a finite number,
-        # a string, an array of json values, or a dict of string to json values.
         st.none(),
         st.booleans(),
         # TODO: Write out the rest of this definition in Hypothesis strategies!
@@ -93,7 +122,7 @@ json_strat = st.deferred(
 @given(json_strat)
 def test_json_dumps(value):
     """Checks that value is serialisable as JSON."""
-    # We expect this test to always pass - the point of this excercise is
+    # We expect this test to always pass - the point of this exercise is
     # to define a recursive strategy, and then investigate the values it
     # generates for a *passing* test.
     hypothesis.note("value={}".format(value))
@@ -102,9 +131,9 @@ def test_json_dumps(value):
 
 
 ##############################################################################
-# `@st.composite` excercise
+# `@st.composite` exercise
 
-# This goal of this excercise is to play with a contrived data dependency,
+# This goal of this exercise is to play with a contrived data dependency,
 # using a composite strategy to generate inputs.  You can use the same tricks
 # as above to check what's being generated, so try to keep the test passing!
 
@@ -113,6 +142,19 @@ def test_json_dumps(value):
 def a_composite_strategy(draw):
     """Generates a (List[int], index) pair.  The index points to a random positive
     element (>= 1); if there are no positive elements index is None.
+
+    `draw` is used within a composite strategy as, e.g.::
+
+        >>> draw(st.booleans()) # can draw True or False
+        True
+
+    Note that `draw` is a reserved parameter that will be used by the
+    `st.composite` decorator to interactively draw values from the
+    strategies that you invoke within this function. That is, you need
+    not pass a value to `draw` when calling this strategy::
+
+       >>> a_composite_strategy().example()
+       ([-1, -2, -3, 4], 3)
     """
     # TODO: draw a list, determine the allowed indices, and choose one to return
     lst = []  # TODO: draw a list of integers here
@@ -123,10 +165,6 @@ def a_composite_strategy(draw):
 
 @given(a_composite_strategy())
 def test_a_composite_strategy(value):
-    # Why generate a tuple with a `@composite` strategy instead of using two
-    # separate strategies?  This way we can ensure certain relationships between
-    # the `lst` and `index` values!  (You can get a similar effect with st.data(),
-    # but the reporting and reproducibility isn't as nice.)
     lst, index = value
     assert all(isinstance(n, int) for n in lst)
     if index is None:
@@ -134,6 +172,13 @@ def test_a_composite_strategy(value):
     else:
         assert lst[index] >= 1
 
+
+# Takeaway
+# --------
+# Why generate a tuple with a `@composite` strategy instead of using two
+# separate strategies?  This way we can ensure certain relationships between
+# the `lst` and `index` values!  (You can get a similar effect with st.data(),
+# but the reporting and reproducibility isn't as nice.)
 
 ##############################################################################
 # Simplified json-schema inference
@@ -209,7 +254,7 @@ def from_schema(schema):
 # `@st.composite` is one way to write this - another would be to define a
 # bare function, and `return st.one_of(st.none(), st.booleans(), ...)` so
 # each strategy can be defined individually.  Use whichever seems more
-# natural to you - the important thing in tests is usally readability!
+# natural to you - the important thing in tests is usually readability!
 @st.composite
 def schema_strategy(draw):
     schema = {"type": draw(st.sampled_from(SCHEMA_TYPES))}
@@ -227,4 +272,3 @@ def test_schema_inference(data, schema):
 
 
 # TODO: write a test that shows validate may return False (maybe a unit test!)
-
