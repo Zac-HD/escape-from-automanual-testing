@@ -81,7 +81,7 @@ def test_map_odd_numbers(x):
 #
 # Suppose you want to generate all integers except 0, this is a perfect
 # application of `.filter`:
-#    `st.integers().filter(x)  # bool(x) evaluates to False iff x==0`
+#    `st.integers().filter(lambda x: x != 0)`
 
 ##############################################################################
 # Defining recursive data.
