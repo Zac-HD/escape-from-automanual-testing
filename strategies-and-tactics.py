@@ -68,7 +68,7 @@ def test_map_odd_numbers(x):
 # If you want mutual recursion though, or have a complicated kind of data
 # (or just limited time in a tutorial), `st.deferred` is the way to go.
 #
-# The `Record` excercise in pbt-101.py defined JSON using `st.recursive`,
+# The `Record` exercise in pbt-101.py defined JSON using `st.recursive`,
 # if you want to compare them, and has some extension problems that you
 # could write as tests here instead.
 
@@ -102,9 +102,9 @@ def test_json_dumps(value):
 
 
 ##############################################################################
-# `@st.composite` excercise
+# `@st.composite` exercise
 
-# This goal of this excercise is to play with a contrived data dependency,
+# This goal of this exercise is to play with a contrived data dependency,
 # using a composite strategy to generate inputs.  You can use the same tricks
 # as above to check what's being generated, so try to keep the test passing!
 
