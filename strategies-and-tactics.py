@@ -39,7 +39,7 @@ def test_filter_odd_numbers(x):
 
 # Takeaway
 # --------
-# While `.filter` was used here to the same effect as `.map` above,
+# While `.filter` was used here to the same effect as `.map` below,
 # it should be noted that filtering should not be relied on to reject
 # large populations of generated values. Hypothesis will raise if
 # a strategy ends up filtering too many values in attempt to generate
@@ -81,8 +81,8 @@ def test_map_odd_numbers(x):
 # strategies, then it is likely that a simple application of `.map`
 # will suffice. E.g. suppose you want a strategy that generate deques,
 # then
-#     `deque_strat = st.lists(...).map(lambda x: deque(x))`
-# will serve nicely.
+#     `deque_strat = st.lists(...).map(deque)`
+# will serve nicely - we don't even need a lambda!
 
 
 ##############################################################################
@@ -126,9 +126,13 @@ def test_json_dumps(value):
     # We expect this test to always pass - the point of this exercise is
     # to define a recursive strategy, and then investigate the values it
     # generates for a *passing* test.
-    hypothesis.note("value={!r}".format(value))
+    hypothesis.note("type: {}".format(type(value)))
     hypothesis.event("type: {}".format(type(value)))
     json.dumps(value)
+
+
+# Takeaway: you've seen and played with a few ways to see what a
+# passing test is doing, without having to inject a failure.
 
 
 ##############################################################################

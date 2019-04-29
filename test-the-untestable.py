@@ -63,6 +63,8 @@ class DieHardProblem(RuleBasedStateMachine):
 
     @rule()
     def fill_small(self):
+        """Filling the small jug from the fountain sets its volume
+        to SMALL_JUG_CAPACITY."""
         pass
 
     @rule()
@@ -71,6 +73,7 @@ class DieHardProblem(RuleBasedStateMachine):
 
     @rule()
     def empty_small(self):
+        """Sets small jug volume to zero."""
         pass
 
     @rule()
@@ -79,6 +82,12 @@ class DieHardProblem(RuleBasedStateMachine):
 
     @rule()
     def pour_small_into_large(self):
+        """Pours water from the small jug into the large jug UNTIL the
+        large jug is full; any remaining water stays in the small jug.
+        For example:
+            small=3, large=0 -> small=0, large=3
+            small=3, large=3 -> small=1, large=5
+        """
         pass
 
     @rule()
@@ -126,8 +135,10 @@ class HanoiPuzzle(object):
 
     def check_valid(self):
         assert set(self.A + self.B + self.C) == set(self.rings)
-        for peg in (self.A, self.B, self.C):
-            assert peg == sorted(peg, reverse=True)
+        for name in "ABC":
+            peg = getattr(self, name)
+            msg = "self.{}={} is invalid".format(name, peg)
+            assert peg == sorted(peg, reverse=True), msg
 
     @property
     def is_solved(self):
@@ -177,6 +188,11 @@ HanoiTest = HanoiSolver.TestCase
 # sanity, `fractions.Fraction` is one standard-library import away.
 #
 # Let's see how this can help via some metamorphic mean() testing....
+#
+# `test_mean_properties` is a template that you can use to explore
+# metamorphic testing; for example checking that taking the mean, appending
+# it to the input, and taking the mean again is equal to the first output.
+# More suggestions below - and good luck with the floats() cases!
 
 
 # from statistics import mean  # Can't wait for 2020 and the Python 2 EoL :p
@@ -190,6 +206,9 @@ from hypothesis import assume, given, strategies as st
 
 def mean(data, as_type=Fraction):
     """Return the mean of the input list, as the given type."""
+    # This function is a correct implementation of the arithmetic mean,
+    # so that you can test it according to the metamorphic properties of
+    # that mathematical equation for integers, floats, and fractions.
     assert as_type in (int, float, Fraction), as_type
     if as_type == int:
         return sum(int(n) for n in data) // len(data)  # integer division case
@@ -197,8 +216,8 @@ def mean(data, as_type=Fraction):
 
 
 # You can use parametrize and given together, but two tips for best results:
-# 1. Put @parametrize *outside* @given -
-# 2. Use named arguments to @given - avoids positional confusion or collisions
+# 1. Put @parametrize *outside* @given - it doesn't work properly from the inside
+# 2. Use named arguments to @given - avoids confusing or colliding positional arguments
 @pytest.mark.parametrize(
     "type_, strat",
     [
@@ -244,6 +263,12 @@ complicated, and then solve it again.
 We'll represent graphs as a dict of `{node: {set of (node, cost) tuples}}`.
 This representation is a *directed* graph, and allows self-links, but we can
 generate examples with neither if that's easier.
+
+I've provided a basic but working implementation of a graphs() strategy,
+breadth-first search, and a test that there is a path between any two nodes
+(which should pass thanks to the force_path=True argument).
+You can expand that test, and then implement one or more of the metamorphic
+tests suggested at the bottom of the file.
 
 If you want to keep going with this one, implement edge costs - and good luck!
 """
