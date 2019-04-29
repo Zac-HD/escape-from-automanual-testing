@@ -196,7 +196,7 @@ def mean(data, as_type=Fraction):
     return sum(as_type(n) for n in data) / len(data)  # float or Fraction case
 
 
-# You can use parametrize and given togther, but two tips for best results:
+# You can use parametrize and given together, but two tips for best results:
 # 1. Put @parametrize *outside* @given -
 # 2. Use named arguments to @given - avoids positional confusion or collisions
 @pytest.mark.parametrize(
@@ -347,7 +347,7 @@ def test_bfs_connected(graph, start, end):
 # 3. Irrelevant additions: adding disconnected nodes or components to the
 #    graph should not change the result at all.  Nor should linking the
 #    midpoint to any new node such that the path from new to end is longer
-#    than from midpoint to end (or, symetrically, for start).
+#    than from midpoint to end (or, symmetrically, for start).
 #
 # 4. Relevant changes: linking two nodes in the shortest path should drop
 #    the nodes between the two newly-linked nodes, but not otherwise change
