@@ -23,15 +23,13 @@ from hypothesis import given, settings, strategies as st
 
 # Remove the mark.xfail decorator,
 # then improve the filter function to make the test pass.
-@pytest.mark.xfail
-@given(st.integers().filter(lambda x: True))
+@given(st.integers().filter(lambda x: x % 2 == 0))
 def test_filter_even_numbers(x):
     # If we convert any even integer to a string, the last digit will be even.
     assert str(x)[-1] in "02468"
 
 
-@pytest.mark.xfail
-@given(st.integers())
+@given(st.integers().filter(lambda x: x % 2 == 1))
 def test_filter_odd_numbers(x):
     # If we convert any odd integer to a string, the last digit will be odd.
     assert str(x)[-1] in "13579"
@@ -56,15 +54,13 @@ def test_filter_odd_numbers(x):
 # You'll need to change the value of the integer, then convert it to a string.
 
 
-@pytest.mark.xfail
-@given(st.integers())
+@given(st.integers().map(lambda x: str(x * 2)))
 def test_map_even_numbers(x):
     # Check that last character of string x is a substring of "02468"
     assert x[-1] in "02468"
 
 
-@pytest.mark.xfail
-@given(st.integers())
+@given(st.integers().map(lambda x: x * 2 + 1).map(str))
 def test_map_odd_numbers(x):
     assert x[-1] in "13579"
 
@@ -105,8 +101,7 @@ def test_map_odd_numbers(x):
 # a string, an array of json values, or a dict of string to json values.
 json_strat = st.deferred(
     lambda: st.one_of(
-        st.none(),
-        st.booleans(),
+        st.none() | st.booleans() | st.integers() | st.floats(allow_nan=False),
         # TODO: Write out the rest of this definition in Hypothesis strategies!
     )
 )

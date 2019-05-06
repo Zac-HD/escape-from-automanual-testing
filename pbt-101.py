@@ -23,7 +23,7 @@ from collections import Counter
 
 import pytest
 
-from hypothesis import given, strategies as st
+from hypothesis import assume, given, strategies as st
 
 
 ##############################################################################
@@ -44,7 +44,7 @@ def sort_a_list(lst):
     # TODO: After fixing the tests, fix this function.
     #       You may use a builtin function  OR write
     #       a sort function yourself.
-    return lst[::-1]
+    return sorted(lst)
 
 
 def test_sort_a_list_basic():
@@ -55,6 +55,7 @@ def test_sort_a_list_basic():
     assert sort_a_list([1, 1]) == [1, 1]
     assert sort_a_list([3, 2, 1]) == [1, 2, 3]
     # add an assertion here
+    assert sort_a_list([1, 2, 1]) == [1, 1, 2]
 
 
 @pytest.mark.parametrize(
@@ -63,8 +64,9 @@ def test_sort_a_list_basic():
         [],
         [1],
         [1, 1],
-        [3, 2, 1]
+        [3, 2, 1],
         # add an example case here
+        [1, 1, 2],
     ),
 )
 def test_sort_a_list_parametrize(lst):
@@ -89,6 +91,11 @@ def test_sort_a_list_hypothesis(lst):
     new = sort_a_list(list(lst))
     assert Counter(lst) == Counter(new)  # sorted list must have same elements
     # TODO: assert that the list is in correct order
+    prev = None
+    for n in new:
+        if prev is not None:
+            assert prev <= n
+        prev = n
 
 
 """
@@ -124,7 +131,7 @@ https://hypothesis.readthedocs.io/en/latest/data.html#hypothesis.strategies.list
 """
 
 
-@given(st.just([1, 2, 3]))  # update this search strategy to be more-general
+@given(st.lists(st.integers(min_value=1), min_size=2))  # update this search strategy to be more-general
 def test_sum_of_list_greater_than_max(lst):
     # TODO: *without* changing the test body, write the most general
     #       argument to @given that will pass for lists of integers.
@@ -190,10 +197,10 @@ def leftpad(string, width, fillchar):
     """
     assert isinstance(width, int) and width >= 0, width
     assert isinstance(fillchar, type(u"")) and len(fillchar) == 1, fillchar
-    return string  # Uh oh, we haven't padded this at all!
+    return string.rjust(width, fillchar)
 
 
-@given(string=st.text(), width=st.just(0), fillchar=st.characters())
+@given(string=st.text(), width=st.integers(0, 1000), fillchar=st.characters())
 def test_leftpad(string, width, fillchar):
     # TODO: allow any length from zero up to e.g. 1000 (capped for performance)
     padded = leftpad(string, width, fillchar)
@@ -202,6 +209,13 @@ def test_leftpad(string, width, fillchar):
     #       Avoid using redundant code/logic between your test
     #       and the function that you are writing - they may have
     #       the same bugs!
+    assert padded.endswith(string)
+    if width <= len(string):
+        assert padded == string
+    else:
+        assert padded.endswith(string)
+        assert len(padded) == width
+        assert set(padded[:len(padded) - len(string)]) == set([fillchar])
 
 
 """
@@ -281,13 +295,13 @@ class Record(object):
 
         This is a *bad* method. This needs to be fixed
         """
-        value = string
+        value = json.loads(string)
         return cls(value)
 
 
 # We can define recursive strategies like so:
 json_strat = st.recursive(
-    st.none() | st.booleans() | st.integers() | st.floats() | st.text(),
+    st.none() | st.booleans() | st.integers() | st.floats(allow_nan=False) | st.text(),
     lambda substrat: st.lists(substrat) | st.dictionaries(st.text(), substrat),
 )
 
@@ -296,9 +310,11 @@ json_strat = st.recursive(
 # In this one-argument case, we could also use `json_strat.map(Record)`.
 @given(st.builds(Record, value=json_strat))
 def test_record_json_roundtrip(record):
+    assume(record == record)  # *partial* substitute for allow_nan=False
     string = record.to_json()
     new = Record.from_json(string)
     # TODO: assert that the new and old records match
+    assert record == new
 
 
 # Extension option: imagine that we are sending serialised records to an
