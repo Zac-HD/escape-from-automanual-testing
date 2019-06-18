@@ -20,6 +20,13 @@ every detail of the API - you can look up that documentation at any time.
 
 Clone this repository, and `pip install pytest hypothesis`.  That's it!
 
+Hypothesis is also available on `conda-forge`, if you prefer to use `conda`.
+For the SciPy edition of this workshop, there are optional excercises that
+require Numpy and Pandas.
+
+To test that everything is installed correctly, run `pytest pbt-101.py`.
+You should see nine passing tests and no errors.
+
 *Any recent version of `pytest`, and any `hypothesis>=4.0`.
 Use whatever package manager and environment you prefer - if in doubt,
 just `pip install` as above.  Hypothesis is compatible with every currently
