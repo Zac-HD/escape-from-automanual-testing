@@ -30,10 +30,13 @@ from hypothesis import given, strategies as st
 """
 Testing a List-Sorting Function
 -------------------------------
-In this problem, we have a bad sorting functions and several tests that fail to
+In this problem, we have a bad sorting function and several tests that fail to
 catch the bug in the function.
 
 Improve the tests so that they catch the bug in the sorting function.
+
+Also see the Python documentation for lists at:
+https://docs.python.org/3/tutorial/datastructures.html
 """
 
 
@@ -71,7 +74,7 @@ def test_sort_a_list_parametrize(lst):
     """This is a parameterized test that leverages the built-in `sorted`
     function as an 'oracle' that we can compare against.
 
-    It asserts  that a general property holds for many inputs - in fact,
+    It asserts that a general property holds for many inputs - in fact,
     all the same inputs that we tested in the version above.
 
     Add the same input as above to see that it catches the same problem"""
@@ -136,7 +139,7 @@ Takeaway
 --------
 Hypothesis' search strategies are designed to provide users with fine control
 over the values that are being generated. Ultimately, we can custom-tailor
-search strategies obey rich properties in order to serve our tests.
+search strategies which obey rich properties in order to serve our tests.
 """
 
 ##############################################################################
@@ -153,7 +156,7 @@ the bugs.
 
 2) Improve `test_leftpad`. Add assertions that certain properties are
    satisfied by the output of `leftpad`. I.e.:
-   - The padded result has the correct a length:
+   - The padded result has the correct length:
      either `width` or `len(string)`, whichever is larger.
    - The padded result ends with the input string.
    - The padded result begins with the correct padding characters.
@@ -180,7 +183,7 @@ def leftpad(string, width, fillchar):
 
     Examples
     --------
-    The following it the *intended* behavior of this function:
+    The following is the *intended* behaviour of this function:
 
     >>> leftpad('cat', width=5, fillchar="Z")
     'ZZcat'
@@ -195,7 +198,7 @@ def leftpad(string, width, fillchar):
 
 @given(string=st.text(), width=st.just(0), fillchar=st.characters())
 def test_leftpad(string, width, fillchar):
-    # TODO: allow any length from zero up to e.g. 1000 (capped for performance)
+    # TODO: allow any `width` from zero up to e.g. 1000 (capped for performance)
     padded = leftpad(string, width, fillchar)
     assert isinstance(padded, type(u"")), padded
     # TODO: Add assertions about the properties described above.
@@ -235,7 +238,7 @@ lists-of-lists-of-items, dicts-of-lists-of items, etc.
 
 Our record can store the following values, just like JSON:
   - `None`
-  - booleans
+  - Booleans
   - finite numbers (i.e. all integers and most floats)
   - strings
   - lists of any of the aforementioned items
@@ -319,7 +322,7 @@ is a simple but powerful property to test. That being said, such a test
 is useful only if it tests a sufficiently-broad and diverse set of inputs.
 
 Constructing such inputs by-hand in this scenario would be
-impermissibly-grueling and would inevitably make for a narrow test.
+impermissibly-gruelling and would inevitably make for a narrow test.
 
 Leveraging Hypothesis' recursive strategy in conjunction with a single
 assertion about the roundtrip relationship makes for a very powerful test
