@@ -102,8 +102,6 @@ For this final block, you have a few options:
 - Start testing your own code with Hypothesis
 - Join a group discussion - what to you plan to test?  What 'killer feature'
   is missing?
-- Learn about the scary CS and implementation details that power Hypothesis
-  (*not* needed for users, or even contributors - for interest only)
 
 
 ## Useful links
