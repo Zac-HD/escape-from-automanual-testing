@@ -73,7 +73,7 @@ and more.
 After the talk, `pytest strategies-and-tactics.py`, and continue as above.
 
 
-#### Testing the Untestable
+#### Testing the Untestable *or* Scientific Hypothesis
 
 Nothing is ever really untestable - but sometimes you need better tools to make
 testing worth the trouble.  We'll explore two approaches:
@@ -88,6 +88,11 @@ testing worth the trouble.  We'll explore two approaches:
 The excercises in `test-the-untestable.py` are deliberately challenging.  Choose
 whichever one is the most interesting to you, and don't worry if it takes you the
 whole block in class - you can always come back to the others later.
+
+Alternatively, if you use the Numpy / Pandas stack, `scientific-hypothesis.py` is
+full of excercises that demonstrate Hypothesis' support for generating arrays,
+dataframes, and all the related things you might need to test data-centric scripts
+- or libraries!
 
 
 #### The bigger picture
