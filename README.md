@@ -103,8 +103,8 @@ whole block in class - you can always come back to the others later.
 
 Alternatively, if you use the Numpy / Pandas stack, `scientific-hypothesis.py` is
 full of exercises that demonstrate Hypothesis' support for generating arrays,
-dataframes, and all the related things you might need to test data-centric scripts
-- or libraries!
+dataframes, and all the related things you might need to test data-centric scripts -
+or libraries!
 
 
 #### The bigger picture
