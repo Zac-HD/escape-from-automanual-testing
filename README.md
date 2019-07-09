@@ -2,8 +2,20 @@
 
 A three-hour workshop on property-based testing with [Hypothesis](https://hypothesis.works),
 first delivered at [PyCon 2019](https://us.pycon.org/2019/schedule/presentation/91/).
+The SciPy version adds exercises with Numpy and Pandas for a four-hour timeslot.
 
-It is designed for intermediate Python users, with extension activities up to expert level.
+Hypothesis is a tool for writing more powerful tests.  In traditional "auto-manual"
+testing, you choose some specific example data, perform an operation, and check
+that you got the expected output.  With Hypothesis, you instead describe the range
+of valid data, an operation that can be performed on any such data, and a property
+that should always be true!
+
+Properties can be as simple as "no exception is raised" or "values are always between
+zero and one", or more complex - like "when I save and reload my data, the output is
+equal to the input".  Either way, I find that these tests are easier to write, better
+express what I *mean* to test, and they even find bugs that I didn't know were possible!
+
+This tutorial is designed for intermediate Python users, with extension activities up to expert level.
 Some minimal experience of unit testing and `pytest` are assumed - if you have ever used
 `@pytest.mark.parametrize`, you are overqualified; but if you have never written and run
 unit tests you may have trouble.
@@ -12,7 +24,7 @@ unit tests you may have trouble.
 ## How this workshop works
 
 It's a crash-course in the important concepts, alternating between short talks and
-hands-on excercises.  You'll get to know the architecture of the library, but not
+hands-on exercises.  You'll get to know the architecture of the library, but not
 every detail of the API - you can look up that documentation at any time.
 
 
@@ -21,7 +33,7 @@ every detail of the API - you can look up that documentation at any time.
 Clone this repository, and `pip install pytest hypothesis`.  That's it!
 
 Hypothesis is also available on `conda-forge`, if you prefer to use `conda`.
-For the SciPy edition of this workshop, there are optional excercises that
+For the SciPy edition of this workshop, there are optional exercises that
 require Numpy and Pandas.
 
 To test that everything is installed correctly, run `pytest pbt-101.py`.
@@ -37,7 +49,7 @@ wide range of versions for it's optional dependencies.*
 #### Property-based testing 101
 
 Each block starts with a short talk (slides separated by a blank black slide),
-followed by a hands-on excercise where you can apply what you've just learned.
+followed by a hands-on exercise where you can apply what you've just learned.
 In this first block we'll see
 [a taxonomy of testing techniques](https://www.hillelwayne.com/post/a-bunch-of-tests/),
 [define property-based testing](https://hypothesis.works/articles/what-is-property-based-testing/),
@@ -85,12 +97,12 @@ testing worth the trouble.  We'll explore two approaches:
   where you don't know exactly what the code *should* do - but do know something
   about how changes in the input relate to changes in the output.
 
-The excercises in `test-the-untestable.py` are deliberately challenging.  Choose
+The exercises in `test-the-untestable.py` are deliberately challenging.  Choose
 whichever one is the most interesting to you, and don't worry if it takes you the
 whole block in class - you can always come back to the others later.
 
 Alternatively, if you use the Numpy / Pandas stack, `scientific-hypothesis.py` is
-full of excercises that demonstrate Hypothesis' support for generating arrays,
+full of exercises that demonstrate Hypothesis' support for generating arrays,
 dataframes, and all the related things you might need to test data-centric scripts
 - or libraries!
 
@@ -115,7 +127,7 @@ As well as the links above, you may be interested in:
 
 - [Hypothesis' official documentation](https://hypothesis.readthedocs.io/)
 - [Hypothesis' technical blog](https://hypothesis.works/articles/technical/)
-- [More practice excercises](https://github.com/DRmacIver/hypothesis-training) -
+- [More practice exercises](https://github.com/DRmacIver/hypothesis-training) -
   if you finish early, these are a good challenge.
 - [Choosing properties for property-based testing](https://fsharpforfunandprofit.com/posts/property-based-testing-2/)
   is written for F#, but the ideas are useful in any language.
