@@ -65,20 +65,20 @@ class DieHardProblem(RuleBasedStateMachine):
     def fill_small(self):
         """Filling the small jug from the fountain sets its volume
         to SMALL_JUG_CAPACITY."""
-        pass
+        self.small = SMALL_JUG_CAPACITY
 
     @rule()
     def fill_large(self):
-        pass
+        self.large = LARGE_JUG_CAPACITY
 
     @rule()
     def empty_small(self):
         """Sets small jug volume to zero."""
-        pass
+        self.small = 0
 
     @rule()
     def empty_large(self):
-        pass
+        self.large = 0
 
     @rule()
     def pour_small_into_large(self):
@@ -88,11 +88,15 @@ class DieHardProblem(RuleBasedStateMachine):
             small=3, large=0 -> small=0, large=3
             small=3, large=3 -> small=1, large=5
         """
-        pass
+        while self.small > 0 and self.large < LARGE_JUG_CAPACITY:
+            self.small -= 1
+            self.large += 1
 
     @rule()
     def pour_large_into_small(self):
-        pass
+        while self.large > 0 and self.small < SMALL_JUG_CAPACITY:
+            self.small += 1
+            self.large -= 1
 
 
 # The `.TestCase` attribute of a StateMachine is an automatically created
