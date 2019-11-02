@@ -1,5 +1,8 @@
 # Escape from automanual testing with Hypothesis!
 
+[![Binder](http://mybinder.org/badge_logo.svg)](http://beta.mybinder.org/v2/gh/Zac-HD/escape-from-automanual-testing/experiments?filepath=demo.py)
+
+
 A three-hour workshop on property-based testing with [Hypothesis](https://hypothesis.works),
 first delivered at [PyCon 2019](https://us.pycon.org/2019/schedule/presentation/91/).
 The SciPy version adds exercises with Numpy and Pandas for a four-hour timeslot.

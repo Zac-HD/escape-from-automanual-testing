@@ -1,0 +1,7 @@
+hypothesis
+ipytest
+jupytext
+pytest
+
+# via jupyter-core (listed for cross-platform pinning)
+pywin32>=1.0 ; sys_platform == 'win32'
