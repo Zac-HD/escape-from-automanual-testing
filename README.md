@@ -46,6 +46,13 @@ supported version of Python, i.e. 2.7, 3.5, 3.6, and 3.7 - and a similarly
 wide range of versions for it's optional dependencies.*
 
 
+#### Video links
+
+If you want to follow along with a recorded presentation, you're in luck:
+I delivered this tutorial [at PyCon US](https://www.youtube.com/watch?v=SmBAl34RV4M)
+and [at SciPy US](https://www.youtube.com/watch?v=spmBQHtJUvE) in 2019.
+
+
 #### Property-based testing 101
 
 Each block starts with a short talk (slides separated by a blank black slide),
