@@ -1,4 +1,4 @@
-[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/kir0ul/escape-from-automanual-testing/master?filepath=lab)
+[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/kir0ul/escape-from-automanual-testing/master?urlpath=lab)
 
 # Escape from automanual testing with Hypothesis!
 
