@@ -1,4 +1,4 @@
-[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/Zac-HD/escape-from-automanual-testing/master?urlpath=lab)
+
 
 # Escape from automanual testing with Hypothesis!
 
@@ -31,6 +31,14 @@ every detail of the API - you can look up that documentation at any time.
 
 
 #### Setting up
+
+##### Online, no installation needed
+
+- Click the [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/Zac-HD/escape-from-automanual-testing/master?urlpath=lab) button
+- Open a `Terminal` (*not* a `Python 3 console`!) from the launcher or `File > New > Terminal`
+- Open python files by clicking on them in the left-hand pane
+
+##### Locally
 
 Clone this repository, and `pip install pytest hypothesis`.  That's it!
 
