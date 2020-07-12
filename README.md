@@ -1,3 +1,5 @@
+[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/Zac-HD/escape-from-automanual-testing/master?urlpath=lab)
+
 # Escape from automanual testing with Hypothesis!
 
 A three-hour workshop on property-based testing with [Hypothesis](https://hypothesis.works),
